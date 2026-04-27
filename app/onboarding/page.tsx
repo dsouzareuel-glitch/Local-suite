@@ -313,6 +313,7 @@ export default function OnboardingPage() {
                 </div>
               </div>
             </div>
+            </div>
             )}
 
             {/* Step 3: Go Live */}
