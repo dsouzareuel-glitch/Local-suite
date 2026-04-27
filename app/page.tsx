@@ -13,7 +13,7 @@ const PRICING_TIERS = [
     price: "₹1,499",
     period: "/month",
     anchor: "Less than a part-time sweeper",
-    hook: "Phone uthana band karo",
+    hook: "Stop missing incoming calls",
     features: ["WhatsApp AI Receptionist", "Price queries answered", "Basic lead capture", "5 services", "Email support"],
     cta: "Start Free Trial",
     popular: false,
@@ -25,7 +25,7 @@ const PRICING_TIERS = [
     price: "₹2,999",
     period: "/month",
     anchor: "1 day's salon revenue",
-    hook: "Khaali time automatic bhar do",
+    hook: "Fill your empty slots automatically",
     features: ["Everything in Basic", "Appointment booking flow", "Automated reminders", "25 services", "Lead analytics", "WhatsApp support"],
     cta: "Start Free Trial",
     popular: true,
@@ -37,7 +37,7 @@ const PRICING_TIERS = [
     price: "₹5,999",
     period: "/month",
     anchor: "Only for those scaling",
-    hook: "Jaise bologe waise message karega",
+    hook: "Speak to customers exactly how you want",
     features: ["Everything in Standard", "Custom AI scripts", "Google Review reply generator", "Unlimited services", "Multi-location", "Priority WhatsApp support", "Missed call → WhatsApp trigger"],
     cta: "Start Free Trial",
     popular: false,
@@ -50,54 +50,54 @@ const FEATURES = [
   {
     icon: Bot,
     title: "AI Intent Detection",
-    desc: "Message classify hota hai — Price, Booking, ya Support. 1 second mein correct reply.",
+    desc: "AI identifies the intent — Price, Booking, or Support. Sends the perfect reply in 1 second.",
     color: "text-green-400",
     bg: "bg-green-500/10",
   },
   {
     icon: Calendar,
     title: "Auto Booking",
-    desc: "Customer WhatsApp karta hai → Bot date poochta hai → Appointment confirm. Zero effort.",
+    desc: "Customer messages → Bot asks for date/time → Appointment confirmed. Zero effort required.",
     color: "text-blue-400",
     bg: "bg-blue-500/10",
   },
   {
     icon: Phone,
     title: "Missed Call Rescue",
-    desc: "Call utha nahi? Bot turant WhatsApp karta hai. Every missed call = a recovered lead.",
+    desc: "Didn't pick up? The bot instantly reaches out on WhatsApp. Every missed call becomes a recovered lead.",
     color: "text-yellow-400",
     bg: "bg-yellow-500/10",
   },
   {
     icon: Star,
     title: "Review Reply AI",
-    desc: "Google reviews ke liye AI-generated replies. Paste karo, copy karo, post karo.",
+    desc: "AI-generated replies for Google reviews. Just paste, copy, and post. Keep your reputation high.",
     color: "text-purple-400",
     bg: "bg-purple-500/10",
   },
   {
     icon: BarChart3,
     title: "Live Dashboard",
-    desc: "Real-time leads, bookings, revenue — sab ek jagah. Analytics without the analysis.",
+    desc: "Real-time leads, bookings, and revenue — all in one place. Powerful analytics made simple.",
     color: "text-pink-400",
     bg: "bg-pink-500/10",
   },
   {
     icon: Zap,
     title: "30-Second Setup",
-    desc: "Name daalo, type choose karo, WhatsApp number dalo. Done. Bot live ho jaata hai.",
+    desc: "Enter your name, choose your business type, and link your number. Your bot is live instantly.",
     color: "text-orange-400",
     bg: "bg-orange-500/10",
   },
 ];
 
 const DEMO_MESSAGES = [
-  { from: "customer", text: "Facial price batao", delay: 0 },
-  { from: "bot", text: "✨ Glam Studios Prices:\n• Facial (Cleanup) — ₹500 (45 min)\n• Facial (Glow) — ₹800 (60 min)\n\nBooking ke liye reply: BOOK 📅", delay: 1000 },
-  { from: "customer", text: "Book", delay: 2500 },
-  { from: "bot", text: "Perfect! 📅 Kab aana chahte ho?\n\nToday ya Tomorrow? 🙏", delay: 3500 },
-  { from: "customer", text: "tomorrow 4pm", delay: 5000 },
-  { from: "bot", text: "✅ Appointment Confirmed!\n\n💆 Facial (Glow)\n📅 Tomorrow at 4:00 PM\n📍 Shop 5, Hill Road, Bandra\n\nMilte hain! 😊", delay: 6000 },
+  { from: "customer", text: "What is the price for a facial?", delay: 0 },
+  { from: "bot", text: "✨ Glam Studios Prices:\n• Facial (Cleanup) — ₹500 (45 min)\n• Facial (Glow) — ₹800 (60 min)\n\nReply BOOK to schedule 📅", delay: 1000 },
+  { from: "customer", text: "BOOK", delay: 2500 },
+  { from: "bot", text: "Perfect! 📅 When would you like to come?\n\nToday or Tomorrow? 🙏", delay: 3500 },
+  { from: "customer", text: "Tomorrow at 4pm", delay: 5000 },
+  { from: "bot", text: "✅ Appointment Confirmed!\n\n💆 Facial (Glow)\n📅 Tomorrow at 4:00 PM\n📍 Shop 5, Hill Road, Bandra\n\nSee you then! 😊", delay: 6000 },
 ];
 
 function AnimatedChat() {
@@ -164,14 +164,14 @@ export default function LandingPage() {
               </div>
 
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                Aapka WhatsApp{" "}
+                Your WhatsApp{" "}
                 <span className="gradient-text">AI Receptionist</span>
-                <br />jab aap soyenge tab bhi kaam karega
+                <br />works even while you sleep
               </h1>
 
               <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-                Salon, clinic, gym — jo bhi ho, yeh bot price queries answer karta hai,
-                appointments book karta hai, aur leads capture karta hai. <strong className="text-white">24/7. Automatically.</strong>
+                Salon, clinic, gym — whatever the business, this bot answers price queries,
+                books appointments, and captures leads. <strong className="text-white">24/7. Automatically.</strong>
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -263,8 +263,8 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="badge-green w-fit mx-auto mb-4">Features</div>
-            <h2 className="text-4xl font-bold">Sab kuch automatic</h2>
-            <p className="text-gray-400 mt-3 max-w-xl mx-auto">Aap apna kaam karo. Bot sab baaki handle kar lega.</p>
+            <h2 className="text-4xl font-bold">Everything is automatic</h2>
+            <p className="text-gray-400 mt-3 max-w-xl mx-auto">Focus on your craft. The bot handles all the noisy coordination.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {FEATURES.map((f) => (
@@ -286,7 +286,7 @@ export default function LandingPage() {
           <div className="text-center mb-12">
             <div className="badge-green w-fit mx-auto mb-4">Pricing</div>
             <h2 className="text-4xl font-bold">Simple, fair pricing</h2>
-            <p className="text-gray-400 mt-3">3-din free trial. Koi hidden charges nahi.</p>
+            <p className="text-gray-400 mt-3">3-day free trial. No hidden charges ever.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {PRICING_TIERS.map((tier) => (
@@ -330,21 +330,18 @@ export default function LandingPage() {
       <section className="py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">Doubts? Hum samajhte hain.</h2>
-          </div>
-          <div className="space-y-4">
             {[
               {
-                q: "\"Mere paas staff hai already.\"",
-                a: "Bilkul! Lekin staff kya karta hai? Call attend karta hai ya customer ke baal dho raha hai? Jab woh dho raha hota hai, phone bajta hai aur customer kho jaata hai. Yeh system ₹50/day mein 24/7 phone uthata hai.",
+                q: "\"I already have staff.\"",
+                a: "Great! But what is your staff doing? Are they answering the phone or serving a customer? When they're busy, calls go unanswered and revenue is lost. This system picks up 24/7 for the cost of one coffee per day.",
               },
               {
-                q: "\"Bahut mehnga hai.\"",
-                a: "Sir, ek haircut ₹400 ka hai. Agar yeh system mahine mein sirf 4 missed calls ko booking mein badal de, toh aapka paisa vasool. Baaki sab profit free hai. 3 din free try karo — no card needed.",
+                q: "\"It's too expensive.\"",
+                a: "One premium service covers the cost of the entire month. If this system converts just 2 missed calls into bookings, it pays for itself. Everything else is pure profit.",
               },
               {
-                q: "\"Mujhe technology samajh nahi aata.\"",
-                a: "Exactly kyon yeh banaya hai! 30 seconds mein setup. Koi coding nahi, koi training nahi. Bas name daalo aur number — bot live ho jaata hai. Humara support WhatsApp pe hi hai.",
+                q: "\"I don't understand technology.\"",
+                a: "That's exactly why we built this! Setup takes 30 seconds. No coding, no training. Just enter your name and number, and the bot goes live. Our support is available right on WhatsApp.",
               },
             ].map((item) => (
               <div key={item.q} className="card glass-hover">
@@ -364,7 +361,7 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold mb-3">Ready to stop missing calls?</h2>
             <p className="text-gray-400 mb-8">30 seconds. No credit card. 3-day free trial.</p>
             <Link href="/onboarding" className="btn-primary text-lg py-4 px-12 inline-flex">
-              Ab shuru karo
+              Get Started Now
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>

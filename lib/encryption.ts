@@ -28,6 +28,8 @@ export function decryptToken(encrypted: string): string {
 
     decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
 
+
+
     let decrypted = decipher.update(encryptedHex, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
 

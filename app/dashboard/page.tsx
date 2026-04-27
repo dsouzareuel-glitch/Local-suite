@@ -14,11 +14,11 @@ const MOCK_STATS = [
 ];
 
 const RECENT_CONVERSATIONS = [
-  { name: "Rahul S.", preview: "Facial price batao", intent: "pricing", time: "2m ago", status: "active", initials: "RS" },
-  { name: "Priya M.", preview: "Book karna hai haircut", intent: "booking", time: "8m ago", status: "booked", initials: "PM" },
-  { name: "Amit K.", preview: "Kitne baje open ho?", intent: "support", time: "15m ago", status: "active", initials: "AK" },
-  { name: "Neha T.", preview: "Beard trim available hai?", intent: "pricing", time: "31m ago", status: "active", initials: "NT" },
-  { name: "Karan D.", preview: "Appointment confirm hua?", intent: "booking", time: "1h ago", status: "booked", initials: "KD" },
+  { name: "Rahul S.", preview: "Tell me the facial price", intent: "pricing", time: "2m ago", status: "active", initials: "RS" },
+  { name: "Priya M.", preview: "I want to book a haircut", intent: "booking", time: "8m ago", status: "booked", initials: "PM" },
+  { name: "Amit K.", preview: "What time do you open?", intent: "support", time: "15m ago", status: "active", initials: "AK" },
+  { name: "Neha T.", preview: "Is beard trim available?", intent: "pricing", time: "31m ago", status: "active", initials: "NT" },
+  { name: "Karan D.", preview: "Is my appointment confirmed?", intent: "booking", time: "1h ago", status: "booked", initials: "KD" },
 ];
 
 const TODAY_APPOINTMENTS = [

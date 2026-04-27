@@ -1,40 +1,46 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-  const supabase = createMiddlewareClient({ req, res });
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({ request });
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  // 1. Protect Dashboard routes
-  if (req.nextUrl.pathname.startsWith("/dashboard")) {
-    if (!session) {
-      return NextResponse.redirect(new URL("/login", req.url));
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value)
+          );
+          response = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          );
+        },
+      },
     }
+  );
 
-    // 2. Check Subscription Status
-    const { data: business } = await supabase
-      .from("businesses")
-      .select("subscription_status, trial_ends_at")
-      .eq("owner_id", session.user.id)
-      .single();
+  // Refresh the session
+  const { data: { user } } = await supabase.auth.getUser();
 
-    const isTrialing = business?.trial_ends_at && new Date(business.trial_ends_at) > new Date();
-    const isActive = business?.subscription_status === "active";
-
-    // If not active and trial expired, redirect to billing
-    if (!isActive && !isTrialing && !req.nextUrl.pathname.startsWith("/dashboard/billing")) {
-      return NextResponse.redirect(new URL("/dashboard/billing?reason=subscription_required", req.url));
-    }
+  // Protect /dashboard — redirect to login if not authenticated
+  if (request.nextUrl.pathname.startsWith("/dashboard") && !user) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  return res;
+  // Redirect logged-in users away from /login
+  if (request.nextUrl.pathname === "/login" && user) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  return response;
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/login"],
 };
