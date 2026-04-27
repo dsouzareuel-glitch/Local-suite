@@ -251,69 +251,68 @@ export default function OnboardingPage() {
                     <div className="h-px flex-1 bg-white/5"></div>
                   </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">WhatsApp Number *</label>
-                    <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">+91</span>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">WhatsApp Number *</label>
+                      <div className="relative">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">+91</span>
+                        <input
+                          id="phone-input"
+                          className="input-field pl-12"
+                          placeholder="9876543210"
+                          value={form.phone}
+                          onChange={(e) => update("phone", e.target.value)}
+                          type="tel"
+                          maxLength={10}
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1.5">This must be your WhatsApp Business number</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">City</label>
                       <input
-                        id="phone-input"
-                        className="input-field pl-12"
-                        placeholder="9876543210"
-                        value={form.phone}
-                        onChange={(e) => update("phone", e.target.value)}
-                        type="tel"
-                        maxLength={10}
+                        id="city-input"
+                        className="input-field"
+                        placeholder="e.g. Mumbai, Delhi, Bangalore"
+                        value={form.city}
+                        onChange={(e) => update("city", e.target.value)}
                       />
                     </div>
-                    <p className="text-xs text-gray-500 mt-1.5">This must be your WhatsApp Business number</p>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Full Address <span className="text-gray-500">(optional)</span></label>
+                      <textarea
+                        id="address-input"
+                        className="input-field resize-none"
+                        rows={2}
+                        placeholder="Shop no., Street, Area, City"
+                        value={form.address}
+                        onChange={(e) => update("address", e.target.value)}
+                      />
+                      <p className="text-xs text-gray-500 mt-1">The bot will share this address with your customers</p>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">City</label>
-                    <input
-                      id="city-input"
-                      className="input-field"
-                      placeholder="e.g. Mumbai, Delhi, Bangalore"
-                      value={form.city}
-                      onChange={(e) => update("city", e.target.value)}
-                    />
+                  <div className="flex gap-3">
+                    <button onClick={() => setStep(1)} className="btn-secondary flex-1 justify-center py-3">
+                      Back
+                    </button>
+                    <button
+                      id="step2-next"
+                      onClick={handleStep2Next}
+                      disabled={loading}
+                      className="btn-primary flex-[2] justify-center py-3 text-base"
+                    >
+                      {loading ? (
+                        <>Activating Intelligence... <span className="animate-spin">⚙️</span></>
+                      ) : (
+                        <>Activate AI Receptionist <ArrowRight className="w-4 h-4" /></>
+                      )}
+                    </button>
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Full Address <span className="text-gray-500">(optional)</span></label>
-                    <textarea
-                      id="address-input"
-                      className="input-field resize-none"
-                      rows={2}
-                      placeholder="Shop no., Street, Area, City"
-                      value={form.address}
-                      onChange={(e) => update("address", e.target.value)}
-                    />
-                    <p className="text-xs text-gray-500 mt-1">The bot will share this address with your customers</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <button onClick={() => setStep(1)} className="btn-secondary flex-1 justify-center py-3">
-                    Back
-                  </button>
-                  <button
-                    id="step2-next"
-                    onClick={handleStep2Next}
-                    disabled={loading}
-                    className="btn-primary flex-[2] justify-center py-3 text-base"
-                  >
-                    {loading ? (
-                      <>Activating Intelligence... <span className="animate-spin">⚙️</span></>
-                    ) : (
-                      <>Activate AI Receptionist <ArrowRight className="w-4 h-4" /></>
-                    )}
-                  </button>
                 </div>
               </div>
-            </div>
-            </div>
             )}
 
             {/* Step 3: Go Live */}
