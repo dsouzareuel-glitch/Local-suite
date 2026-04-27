@@ -354,9 +354,9 @@ export default function OnboardingPage() {
                 <div className="card border border-yellow-500/20" style={{ background: "rgba(251,191,36,0.05)" }}>
                   <div className="font-semibold text-yellow-400 mb-2">⚡ Last Step: Connect WhatsApp</div>
                   <p className="text-sm text-gray-400 mb-4">Go to your Dashboard → Settings → Paste your WhatsApp API token. Takes 2 minutes.</p>
-                  <div className="text-xs text-gray-500 bg-white/5 rounded-lg p-3 font-mono text-left">
-                    Webhook URL: {(process.env.NEXT_PUBLIC_APP_URL || "https://localsuite.app") + "/api/whatsapp/webhook"}<br></br>
-                    Verify Token: localsuite-verify-secret-2024
+                  <div className="text-xs text-gray-500 bg-white/5 rounded-lg p-3 font-mono text-left space-y-1">
+                    <div>Webhook URL: https://localsuite.app/api/whatsapp/webhook</div>
+                    <div>Verify Token: localsuite-verify-secret-2024</div>
                   </div>
                 </div>
 
