@@ -1,14 +1,16 @@
 "use client";
-import { useState } from "react";
-import { Save, Eye, EyeOff, ExternalLink, CheckCircle, Calendar, CreditCard, ShieldCheck } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Save, Eye, EyeOff, ExternalLink, CheckCircle, Calendar, CreditCard, ShieldCheck, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function SettingsPage() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
-    businessName: "Glam Studios",
-    phone: "+91-9876543210",
-    city: "Mumbai",
-    address: "Shop 5, Hill Road, Bandra West, Mumbai 400050",
+    businessName: "",
+    phone: "",
+    city: "",
+    address: "",
     tone: "friendly_hinglish",
     language: "hinglish",
     auto_confirm: true,
@@ -23,13 +25,65 @@ export default function SettingsPage() {
   const [showKeys, setShowKeys] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const save = () => {
-    setSaved(true);
-    toast.success("Settings saved!");
-    setTimeout(() => setSaved(false), 2000);
+  // Fetch current settings on load
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await fetch("/api/business/settings/get");
+        if (res.ok) {
+          const data = await res.json();
+          // Sanitize data: convert nulls to empty strings to prevent React crash
+          const sanitizedData = {
+            businessName: data.businessName || "",
+            phone: data.phone || "",
+            city: data.city || "",
+            address: data.address || "",
+            wa_token: data.wa_token || "",
+            phone_number_id: data.phone_number_id || "",
+            openai_key: data.openai_key || "",
+            tone: data.tone || "friendly_hinglish",
+          };
+          setForm(prev => ({ ...prev, ...sanitizedData }));
+        }
+      } catch (e) {
+        console.error("Failed to load settings:", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadSettings();
+  }, []);
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/business/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) throw new Error("Failed to save");
+
+      setSaved(true);
+      toast.success("Settings synced to Supabase! 💎");
+      setTimeout(() => setSaved(false), 2000);
+    } catch (error: any) {
+      toast.error(error.message || "Save failed");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const update = (key: string, val: string | boolean) => setForm((f) => ({ ...f, [key]: val }));
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 text-[--brand-gold] animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-fade-in max-w-2xl">
@@ -40,7 +94,7 @@ export default function SettingsPage() {
 
       {/* Business Details */}
       <div className="card space-y-4">
-        <h2 className="font-semibold">Business Details</h2>
+        <h2 className="font-semibold text-white">Business Details</h2>
         <div className="grid grid-cols-2 gap-3">
           <div className="col-span-2">
             <label className="block text-xs text-gray-400 mb-1.5">Business Name</label>
@@ -56,7 +110,7 @@ export default function SettingsPage() {
           </div>
           <div className="col-span-2">
             <label className="block text-xs text-gray-400 mb-1.5">Address</label>
-            <textarea className="input-field resize-none" rows={2} value={form.address} onChange={(e) => update("address", e.target.value)} />
+            <textarea className="input-field resize-none text-white" rows={2} value={form.address} onChange={(e) => update("address", e.target.value)} />
           </div>
         </div>
       </div>
@@ -97,11 +151,11 @@ export default function SettingsPage() {
       <div className="card space-y-4">
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 text-[--brand-gold]" />
-          <h2 className="font-semibold">Bot Behavior</h2>
+          <h2 className="font-semibold text-white">Bot Behavior</h2>
         </div>
         <div>
-          <label className="block text-xs text-[--muted] mb-1.5">Reply Tone</label>
-          <select id="setting-tone" className="input-field" value={form.tone} onChange={(e) => update("tone", e.target.value)}>
+          <label className="block text-xs text-[--muted] mb-1.5 text-white">Reply Tone</label>
+          <select id="setting-tone" className="input-field text-white" value={form.tone} onChange={(e) => update("tone", e.target.value)}>
             <option value="friendly_hinglish">Friendly Hinglish (Recommended)</option>
             <option value="professional">Professional English</option>
             <option value="energetic">Energetic (Gyms)</option>
@@ -154,7 +208,7 @@ export default function SettingsPage() {
             <label className="block text-xs text-gray-400 mb-1.5">Meta WhatsApp Token</label>
             <input
               id="setting-wa-token"
-              className="input-field font-mono text-sm"
+              className="input-field font-mono text-sm text-white"
               type={showKeys ? "text" : "password"}
               placeholder="EAAxxxxxx..."
               value={form.wa_token}
@@ -165,7 +219,7 @@ export default function SettingsPage() {
             <label className="block text-xs text-gray-400 mb-1.5">WhatsApp Phone Number ID</label>
             <input
               id="setting-phone-id"
-              className="input-field font-mono text-sm"
+              className="input-field font-mono text-sm text-white"
               type={showKeys ? "text" : "password"}
               placeholder="123456789012345"
               value={form.phone_number_id}
@@ -176,7 +230,7 @@ export default function SettingsPage() {
             <label className="block text-xs text-gray-400 mb-1.5">OpenAI API Key</label>
             <input
               id="setting-openai"
-              className="input-field font-mono text-sm"
+              className="input-field font-mono text-sm text-white"
               type={showKeys ? "text" : "password"}
               placeholder="sk-proj-..."
               value={form.openai_key}
@@ -188,12 +242,13 @@ export default function SettingsPage() {
 
       {/* Save */}
       <div className="flex gap-3">
-        <button id="save-settings" onClick={save} className="btn-primary py-2.5 px-6">
-          {saved ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-          {saved ? "Saved!" : "Save Settings"}
+        <button id="save-settings" onClick={save} disabled={saving} className="btn-primary py-2.5 px-6">
+          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : saved ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+          {saving ? "Saving..." : saved ? "Saved!" : "Save Settings"}
         </button>
         <button className="btn-secondary py-2.5 px-6">Cancel</button>
       </div>
     </div>
   );
 }
+

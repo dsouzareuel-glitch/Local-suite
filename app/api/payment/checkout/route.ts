@@ -1,4 +1,4 @@
-import { razorpay } from "@/lib/razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 import { createServiceClient } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,6 +27,9 @@ export async function POST(req: NextRequest) {
     if (!business) {
       return NextResponse.json({ error: "Business not found" }, { status: 404 });
     }
+
+    // Get lazy-initialized Razorpay client
+    const razorpay = getRazorpay();
 
     // Create a Razorpay Payment Link
     const paymentLink = await razorpay.paymentLink.create({

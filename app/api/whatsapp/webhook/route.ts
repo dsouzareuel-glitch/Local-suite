@@ -17,8 +17,10 @@ export async function GET(req: NextRequest) {
 
 // ─── POST: Incoming WhatsApp Messages ────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  console.log("🚨 SIREN: WEBHOOK HIT! Incoming WhatsApp payload...");
   try {
     const body = await req.json();
+    console.log("📦 Payload detected for Phone ID:", body?.entry?.[0]?.changes?.[0]?.value?.metadata?.phone_number_id);
     
     // Delegate to the bot state machine
     await handleWhatsAppMessage(body);

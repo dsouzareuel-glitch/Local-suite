@@ -6,9 +6,14 @@ import { format, parseISO, addDays } from "date-fns";
 
 export async function handleWhatsAppMessage(payload: any) {
   const message = parseWebhookMessage(payload);
-  if (!message) return;
+  if (!message) {
+    console.log("⚠️ Bot: Could not parse webhook message.");
+    return;
+  }
 
   const { from, text, phoneNumberId, customerName: profileName } = message;
+  console.log(`📩 Bot: Incoming message from ${from} (Phone ID: ${phoneNumberId})`);
+  
   const supabase = createServiceClient();
 
   // 1. Identify the business by phoneNumberId
@@ -18,7 +23,12 @@ export async function handleWhatsAppMessage(payload: any) {
     .eq("phone_number_id", phoneNumberId)
     .single();
 
-  if (bizError || !business) return;
+  if (bizError || !business) {
+    console.log(`❌ Bot: No business found for Phone ID: ${phoneNumberId}`);
+    return;
+  }
+
+  console.log(`✅ Bot: Found business: ${business.name} (ID: ${business.id})`);
 
   // 2. Get or create session
   let { data: session } = await supabase
@@ -29,7 +39,8 @@ export async function handleWhatsAppMessage(payload: any) {
     .single();
 
   if (!session) {
-    const { data: newSession } = await supabase
+    console.log(`🆕 Bot: Creating new session for ${from}`);
+    const { data: newSession, error: createError } = await supabase
       .from("whatsapp_sessions")
       .insert({
         business_id: business.id,
@@ -38,7 +49,14 @@ export async function handleWhatsAppMessage(payload: any) {
       })
       .select()
       .single();
+    
+    if (createError) {
+      console.log(`❌ Bot: Failed to create session: ${createError.message}`);
+      return;
+    }
     session = newSession;
+  } else {
+    console.log(`📂 Bot: Found existing session (State: ${session.state})`);
   }
 
   // 3. State Machine Logic
