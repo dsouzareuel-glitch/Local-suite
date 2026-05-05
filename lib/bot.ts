@@ -78,11 +78,35 @@ export async function handleWhatsAppMessage(payload: any) {
   }
 }
 
-async function handleIdle(supabase: any, business: any, session: any, text: string) {
-  // Logic: If user wants to book, show next 7 available dates
-  const isBookingIntent = /book|appointment|slot|appointment|hi|hello|hey/i.test(text);
+import { generateAIResponse } from "./ai";
 
-  if (isBookingIntent) {
+async function handleIdle(supabase: any, business: any, session: any, text: string) {
+  console.log(`🤖 Bot: Generating AI response for ${session.customer_phone}`);
+
+  // Get last 5 messages for context
+  const { data: history } = await supabase
+    .from("whatsapp_messages")
+    .select("role, content")
+    .eq("session_id", session.id)
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  const formattedHistory = (history || []).reverse().map((h: any) => ({
+    role: h.role,
+    content: h.content
+  }));
+
+  const aiResponse = await generateAIResponse({
+    businessName: business.name,
+    businessDescription: business.description || "A local premium service provider.",
+    services: business.services || "General consultations and bookings.",
+    customerName: session.customer_phone,
+    customerMessage: text,
+    history: formattedHistory
+  });
+
+  if (aiResponse.includes("BOOKING_INTENT")) {
+    console.log(`🎯 Bot: Booking intent detected! Triggering date selection...`);
     const dates = [];
     for (let i = 0; i < 7; i++) {
       const d = addDays(new Date(), i);
@@ -92,7 +116,7 @@ async function handleIdle(supabase: any, business: any, session: any, text: stri
       });
     }
 
-    let msg = `Hi! 👋 Welcome to *${business.name}*.\n\nWhen would you like to visit? Please reply with the number:\n\n`;
+    let msg = `Sure! I can help you with that. When would you like to visit *${business.name}*? 😊\n\nPlease reply with a number:\n\n`;
     dates.forEach((d, i) => {
       msg += `${i + 1}. ${d.label}\n`;
     });
@@ -109,14 +133,20 @@ async function handleIdle(supabase: any, business: any, session: any, text: stri
       .update({ state: "SELECTING_DATE" })
       .eq("id", session.id);
   } else {
-    // Other intents (pricing, address) can be handled here or by AI
+    console.log(`💬 Bot: Responding with AI message.`);
     await sendWhatsAppMessage({
       to: session.customer_phone,
-      message: "How can I help you today? You can ask about our *prices*, *location*, or type *BOOK* to schedule an appointment. 😊",
+      message: aiResponse,
       phoneNumberId: business.phone_number_id,
       token: business.whatsapp_token
     });
   }
+
+  // Save interaction to history
+  await supabase.from("whatsapp_messages").insert([
+    { session_id: session.id, role: "user", content: text },
+    { session_id: session.id, role: "model", content: aiResponse }
+  ]);
 }
 
 async function handleDateSelection(supabase: any, business: any, session: any, text: string) {
